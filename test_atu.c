@@ -23,6 +23,7 @@
 
 #include "x6100_control.h"
 #include "x6100_flow.h"
+#include "x6100_gpio.h"
 
 typedef enum {
 	ATU_IDLE = 0,
@@ -38,6 +39,9 @@ int main() {
 		return 1;
 
 	if (!x6100_flow_init())
+		return 1;
+
+	if (!x6100_gpio_init())
 		return 1;
 
 	x6100_control_cmd(x6100_vfoa_freq, 7135000);
@@ -57,6 +61,7 @@ int main() {
 			switch (atu) {
 				case ATU_IDLE:
 					x6100_control_cmd(x6100_sple_atue_trx, x6100_atu_tune);
+					x6100_gpio_set(x6100_pin_light, 1);
 					atu = ATU_START;
 					break;
 					
@@ -69,6 +74,7 @@ int main() {
 				case ATU_RUN:
 					if (!pack->flag.tx) {
 						x6100_control_cmd(x6100_sple_atue_trx, 0);
+						x6100_gpio_set(x6100_pin_light, 0);
 						atu = ATU_DONE;
 					}
 					break;

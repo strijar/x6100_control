@@ -63,13 +63,18 @@ typedef enum {
 	x6100_biasdrive_biasfinal = 41,
 	x6100_rit,
 	x6100_xit,
+	x6100_filter1_low,
+	x6100_filter1_high,
+	x6100_filter2_low,
+	x6100_filter2_high,
 
 	x6100_rphscmp = 48,
 	x6100_rmagcmp,
 	x6100_txiofs,
 	x6100_txqofs,
 
-	x6100_pwrsync = 53
+	x6100_pwrsync = 53,
+	x6100_last
 } x6100_cmd_enum_t;
 
 /* Regs x6100_vfoa... x6100_vfob... */

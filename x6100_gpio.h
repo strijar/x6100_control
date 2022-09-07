@@ -19,33 +19,14 @@
  *
  */
 
-#include <unistd.h>
-#include <stdio.h>
+#pragma once
 
-#include "x6100_control.h"
-#include "x6100_gpio.h"
+#include <stdint.h>
+#include <stdbool.h>
 
-int main() {
-	if (!x6100_control_init())
-		return 1;
+extern int x6100_pin_wifi;
+extern int x6100_pin_rf;
+extern int x6100_pin_light;
 
-	if (!x6100_gpio_init())
-		return 1;
-
-	x6100_control_cmd(x6100_rxvol, 20);
-	x6100_control_cmd(x6100_vfoa_mode, x6100_mode_usb_dig);
-
-	while (true) {
-		printf("Freq 7.074 MHz\n");
-		x6100_control_cmd(x6100_vfoa_freq, 7074000);
-		sleep(5);
-
-		printf("Freq 10.100 MHz\n");
-		x6100_control_cmd(x6100_vfoa_freq, 10100000);
-		sleep(5);
-
-		printf("Freq 14.074 MHz\n");
-		x6100_control_cmd(x6100_vfoa_freq, 14074000);
-		sleep(5);
-	}
-}
+bool x6100_gpio_init();
+void x6100_gpio_set(int pin, int value);

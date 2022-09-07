@@ -1,9 +1,9 @@
 CC = arm-linux-gnueabihf-gcc
 CFLAGS = -I. -O2
 
-APP = test_atu
+APP = test_vfo
 
-LIB_OBJS = x6100_control.o x6100_flow.o
+LIB_OBJS = x6100_control.o x6100_flow.o x6100_gpio.o
 APP_OBJS = $(APP).o
 
 all: $(APP)
