@@ -26,9 +26,6 @@ void x6100_server::rpc_set_vfo(wampcc::wamp_session& caller, wampcc::call_info i
 	const wampcc::json_array&	list = info.args.args_list;
 	const wampcc::json_object&	dict = info.args.args_dict;
 
-	dealer->publish(realm, "set_vfo", {}, info.args);
-	caller.result(info.request_id);
-
 	if (list.size() > 0) {
 		auto item = list[0];
 		
