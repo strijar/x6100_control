@@ -51,10 +51,14 @@ bool x6100_flow_init() {
     cfsetispeed(&attr, B1152000);
     cfsetospeed(&attr, B1152000);	
 
+	#if 1
+	cfmakeraw(&attr);
+	#else
 	attr.c_cflag = attr.c_cflag & 0xfffffe8f | 0x30;
 	attr.c_iflag = attr.c_iflag & 0xfffffa14;
 	attr.c_oflag = attr.c_oflag & 0xfffffffa;
 	attr.c_lflag = attr.c_lflag & 0xffff7fb4;	
+	#endif
     
     if (tcsetattr(flow_fd, 0, &attr) < 0) {
     	close(flow_fd);

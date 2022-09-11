@@ -62,7 +62,7 @@ bool x6100_control_init() {
 		
 	memset(&all_cmd, 0, sizeof(all_cmd));
 	
-	all_cmd.arg[x6100_rxvol] = 10;
+	all_cmd.arg[x6100_rxvol] = 0;
 	all_cmd.arg[x6100_rfg_txpwr] = (10 << 8) | 64;
 
 	all_cmd.arg[x6100_filter1_low] = (uint32_t) 50.0f;
