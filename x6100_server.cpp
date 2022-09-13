@@ -64,6 +64,18 @@ void x6100_server::flow_pack(const x6100_flow_t *pack) {
     power_args.args_dict["capacity"] = pack->batcap;
 
 	dealer->publish(realm, "power", {}, power_args);
+
+	wampcc::wamp_args	samples_args;
+	wampcc::json_array	samples_array;
+
+	samples_array.reserve(1024);
+	
+	for (int i = 0; i < 1024; i++)
+		samples_array.push_back(pack->samples[i]);
+
+	samples_args.args_list = samples_array;
+
+	dealer->publish(realm, "samples", {}, samples_args);
 }
 
 ///
