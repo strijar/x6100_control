@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 extern int x6100_pin_wifi;
 extern int x6100_pin_rf;
