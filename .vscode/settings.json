@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "CMakeLists.txt": "cmake",
+        "*.cmake": "cmake",
+        "*.cmake.in": "cmake",
+        ".clangd": "yaml",
+        ".clang-tidy": "yaml",
+        ".clazy": "yaml"
+    }
+}
