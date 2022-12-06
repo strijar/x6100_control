@@ -18,8 +18,8 @@ StatementMacros:
 SortIncludes: true
 IncludeBlocks: Regroup
 IncludeCategories:
-  # CCSP libraries (uses "ccsp_*")
-  - Regex: '^"ccsp.*'
+  # Aether libraries (uses "aether_*")
+  - Regex: '^"aether.*'
     Priority: 1
   # Boost (uses always <boost_*>)
   - Regex: "^<boost.*>"
