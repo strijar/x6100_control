@@ -1,22 +1,10 @@
 /*
- *  Xiegu X6100 Control interface
- *  Copyright (c) 2022 by Belousov Oleg aka R1CBU
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  *
+ *  Aether Xiegu X6100 Control
  *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library; if not, write to the Free Software
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ *  Copyright (c) 2022 Belousov Oleg a.k.a. R1CBU
+ *  Copyright (c) 2022 Rui Oliveira a.k.a. CT7ALW
  */
 
 #include <unistd.h>
@@ -48,37 +36,38 @@ int main() {
 
 	while (atu != ATU_DONE) {
 		x6100_flow_t *pack = x6100_flow_read();
-		
-		if (pack) {
-			printf(
-				"tx=%d "
-				"txpwr=%.1f swr=%.1f alc=%.1f vext=%.1f vbat=%.1f bat=%d atu_params=%08X\n", 
-				pack->flag.tx,
-				pack->tx_power * 0.1, pack->vswr * 0.1f, pack->alc_level * 0.1, pack->vext * 0.1f, pack->vbat * 0.1f, pack->batcap,
-				pack->atu_params
-			);
 
-			switch (atu) {
-				case ATU_IDLE:
-					x6100_control_cmd(x6100_sple_atue_trx, x6100_atu_tune);
-					x6100_gpio_set(x6100_pin_light, 1);
-					atu = ATU_START;
-					break;
-					
-				case ATU_START:
-					if (pack->flag.tx) {
-						atu = ATU_RUN;
-					}
-					break;
-					
-				case ATU_RUN:
-					if (!pack->flag.tx) {
-						x6100_control_cmd(x6100_sple_atue_trx, 0);
-						x6100_gpio_set(x6100_pin_light, 0);
-						atu = ATU_DONE;
-					}
-					break;
-			}
-		}
-	}
+        if (pack)
+        {
+            printf("tx=%d "
+                   "txpwr=%.1f swr=%.1f alc=%.1f vext=%.1f vbat=%.1f bat=%d atu_params=%08X\n",
+                   pack->flag.tx, pack->tx_power * 0.1, pack->vswr * 0.1f, pack->alc_level * 0.1,
+                   pack->vext * 0.1f, pack->vbat * 0.1f, pack->batcap, pack->atu_params);
+
+            switch (atu)
+            {
+            case ATU_IDLE:
+                x6100_control_cmd(x6100_sple_atue_trx, x6100_atu_tune);
+                x6100_gpio_set(x6100_pin_light, 1);
+                atu = ATU_START;
+                break;
+
+            case ATU_START:
+                if (pack->flag.tx)
+                {
+                    atu = ATU_RUN;
+                }
+                break;
+
+            case ATU_RUN:
+                if (!pack->flag.tx)
+                {
+                    x6100_control_cmd(x6100_sple_atue_trx, 0);
+                    x6100_gpio_set(x6100_pin_light, 0);
+                    atu = ATU_DONE;
+                }
+                break;
+            }
+        }
+    }
 }

@@ -1,22 +1,10 @@
 /*
- *  Xiegu X6100 Control interface
- *  Copyright (c) 2022 by Belousov Oleg aka R1CBU
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  *
+ *  Aether Xiegu X6100 Control
  *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library; if not, write to the Free Software
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ *  Copyright (c) 2022 Belousov Oleg a.k.a. R1CBU
+ *  Copyright (c) 2022 Rui Oliveira a.k.a. CT7ALW
  */
 
 #include "x6100_server.h"
@@ -28,12 +16,14 @@ void x6100_server::rpc_set_vfo(wampcc::wamp_session& caller, wampcc::call_info i
 
 	if (list.size() > 0) {
 		auto item = list[0];
-		
-		if (item.is_uint8()) {
-			uint8_t vfo = item.as_uint();
-			
-			if (vfo == 1 || vfo == 2) {
-				for (auto item = dict.begin(); item != dict.end(); item++) {
+
+        if (item.is_uint8())
+        {
+            uint8_t vfo = item.as_uint();
+
+            if (vfo == 1 || vfo == 2)
+            {
+                for (auto item = dict.begin(); item != dict.end(); item++) {
 					uint32_t x = item->second.as_uint();
 
 					if (item->first.compare("freq") == 0) {
@@ -48,30 +38,33 @@ void x6100_server::rpc_set_vfo(wampcc::wamp_session& caller, wampcc::call_info i
 				dealer->publish(realm, "set_vfo", {}, info.args);
 				caller.result(info.request_id);
 				return;
-			}
-		}
-	}
-	
-	caller.call_error(info.request_id, "Invalid param");
+            }
+        }
+    }
+
+    caller.call_error(info.request_id, "Invalid param");
 }
 
 void x6100_server::rpc_set_rxvol(wampcc::wamp_session& caller, wampcc::call_info& info) {
 	const wampcc::json_array& list = info.args.args_list;
-	
-	if (list.size() > 0) {
-		auto item = list[0];
-		
-		if (item.is_uint()) {
-			uint32_t x = item.as_uint();
-			
-			if (x < 55) {
-				x6100_control_cmd(x6100_rxvol, x);
+
+    if (list.size() > 0)
+    {
+        auto item = list[0];
+
+        if (item.is_uint())
+        {
+            uint32_t x = item.as_uint();
+
+            if (x < 55)
+            {
+                x6100_control_cmd(x6100_rxvol, x);
 				dealer->publish(realm, "set_rxvol", {}, info.args);
 				caller.result(info.request_id);
 				return;
-			}
-		}
-	}
-	
-	caller.call_error(info.request_id, "Invalid param");
+            }
+        }
+    }
+
+    caller.call_error(info.request_id, "Invalid param");
 }

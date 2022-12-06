@@ -1,22 +1,10 @@
 /*
- *  Xiegu X6100 Control interface
- *  Copyright (c) 2022 by Belousov Oleg aka R1CBU
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  *
+ *  Aether Xiegu X6100 Control
  *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library; if not, write to the Free Software
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ *  Copyright (c) 2022 Belousov Oleg a.k.a. R1CBU
+ *  Copyright (c) 2022 Rui Oliveira a.k.a. CT7ALW
  */
 
 #pragma once
@@ -31,9 +19,9 @@ typedef enum {
 	x6100_vfoa_pre,
 	x6100_vfoa_mode,
 	x6100_vfoa_agc,
-	
-	x6100_vfob_ham_band = 6,
-	x6100_vfob_freq,
+
+    x6100_vfob_ham_band = 6,
+    x6100_vfob_freq,
 	x6100_vfob_att,
 	x6100_vfob_pre,
 	x6100_vfob_mode,
@@ -56,9 +44,9 @@ typedef enum {
 	x6100_agcknee_agcslope_agchang = 27,
 	x6100_mode,
 	x6100_monilevel,
-	
-	x6100_ks_km_kimb_cwtone_cwvol_cwtrain = 33,
-	x6100_qsktime_kr,
+
+    x6100_ks_km_kimb_cwtone_cwvol_cwtrain = 33,
+    x6100_qsktime_kr,
 
 	x6100_biasdrive_biasfinal = 41,
 	x6100_rit,

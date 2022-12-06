@@ -1,33 +1,20 @@
 /*
- *  Xiegu X6100 Control interface
- *  Copyright (c) 2022 by Belousov Oleg aka R1CBU
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  *
+ *  Aether Xiegu X6100 Control
  *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library; if not, write to the Free Software
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ *  Copyright (c) 2022 Belousov Oleg aka R1CBU
+ *  Copyright (c) 2022 Rui Oliveira aka CT7ALW
  */
 
 #include "x6100_server.h"
 #include <iostream>
 
-x6100_server::x6100_server() 
-	:
-	realm("default"),
-    kernel(new wampcc::kernel({}, wampcc::logger::console())),
-    dealer(new wampcc::wamp_router(kernel.get(), nullptr)),
-    shutdown_future(shutdown_pomise.get_future())
+x6100_server::x6100_server()
+    : realm("default"),
+      kernel(new wampcc::kernel({}, wampcc::logger::console())),
+      dealer(new wampcc::wamp_router(kernel.get(), nullptr)),
+      shutdown_future(shutdown_pomise.get_future())
 {
 	dealer->callable(realm,  "set_vfo", [this](wampcc::wamp_router&, wampcc::wamp_session& ws, wampcc::call_info info) { rpc_set_vfo(ws, info); });
   	dealer->callable(realm,  "set_rxvol", [this](wampcc::wamp_router&, wampcc::wamp_session& ws, wampcc::call_info info) { rpc_set_rxvol(ws, info); });
@@ -69,8 +56,8 @@ void x6100_server::flow_pack(const x6100_flow_t *pack) {
 	wampcc::json_array	samples_array;
 
 	samples_array.reserve(1024);
-	
-	for (int i = 0; i < 1024; i++)
+
+    for (int i = 0; i < 1024; i++)
 		samples_array.push_back(pack->samples[i]);
 
 	samples_args.args_list = samples_array;
@@ -100,8 +87,8 @@ int main() {
 				server.flow_pack(pack);
 			}
 		}
-    	
-    	return 0;
+
+        return 0;
   	} catch (std::exception& e) {
   		std::cerr << e.what() << std::endl;
     	return 1;
