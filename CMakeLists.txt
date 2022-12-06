@@ -5,8 +5,6 @@ project(
   VERSION 0.1
   LANGUAGES C CXX)
 
-include(CMakeDependentOption)
-
 # Options ------------------------------------------------------------------------------------------
 
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries." ON) # CMake option name
