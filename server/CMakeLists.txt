@@ -1,4 +1,4 @@
-if(NOT BUILD_SERVER)
+if(NOT AETHERX6100CTRL_BUILD_SERVER)
   return()
 endif()
 

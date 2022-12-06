@@ -1,4 +1,4 @@
-if(NOT BUILD_TEST)
+if(NOT AETHERX6100CTRL_BUILD_TEST)
   return()
 endif()
 
