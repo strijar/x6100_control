@@ -42,6 +42,6 @@ include(cmake/dependencies/openmp.cmake)
 include(cmake/developer_mode.cmake)
 
 # Projects
-add_subdirectory(lib)
+add_subdirectory(aetherx6100ctrl)
 add_subdirectory(test)
 add_subdirectory(server)
