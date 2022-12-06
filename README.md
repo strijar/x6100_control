@@ -1,8 +1,15 @@
-# X6100 Control Interface
+# Aether X6100 Control
 
-I really want to work on the firmware for the transceiver Xiegu X6100. 
-I even turned to the developers with a request to open the source.
-I didn't get any response from them at all.
-So I took matters into my own hands!
+A project to make an interface library between the radio's STM32 base controller
+and user-space applications.
 
-All the information I got was obtained from the app x6100_ui_v100.
+Now part of the [Aether X6100 project](https://github.com/ruilvo/AetherX6100).
+
+## Credits
+
+The original project belongs to [Oleg Belousov](https://github.com/strijar).
+
+Most of the information present reverse was obtained from reverse-engineering
+the Xiegu X6100's front end app, called `x6100_ui_v100`. Credits go to Jet Yee,
+the original software developer, and the only software developer at Xiegu from
+what we know.
