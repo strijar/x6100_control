@@ -1,7 +1,7 @@
 include_guard(GLOBAL)
 
 if(NOT WIN32 AND PROJECT_IS_TOP_LEVEL)
-  set(CMAKE_INSTALL_PREFIX "/opt/com.aether-radio/AetherX6100Control")
+  set(CMAKE_INSTALL_PREFIX "/opt/com.aether-radio/${PROJECT_NAME}")
   set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 endif()
 
