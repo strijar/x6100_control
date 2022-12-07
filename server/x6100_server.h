@@ -20,12 +20,14 @@
  */
 
 #pragma once
+
+#include <cstdint>
 #include "wampcc/wampcc.h"
 
 extern "C" {
-	#include "x6100_control.h"
-	#include "x6100_gpio.h"
-	#include "x6100_flow.h"
+	#include <x6100control/x6100_control.h>
+	#include <x6100control/x6100_gpio.h>
+	#include <x6100control/x6100_flow.h>
 }
 
 class x6100_server {
@@ -35,6 +37,7 @@ public:
 
 	std::future<void>& shutdown() { return shutdown_future; }
 	void flow_pack(const x6100_flow_t *pack);
+	void idle(bool necessarily);
 
 private:
   	std::string  							realm;
@@ -43,6 +46,7 @@ private:
  	std::shared_ptr<wampcc::wamp_router> 	dealer;
  	std::promise<void> 						shutdown_pomise;
   	std::future<void>  						shutdown_future;
+  	uint64_t								cmd_idle;
 
 	void rpc_set_vfo(wampcc::wamp_session& caller, wampcc::call_info info);
 	void rpc_set_rxvol(wampcc::wamp_session& caller, wampcc::call_info& info);

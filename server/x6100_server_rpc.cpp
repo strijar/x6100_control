@@ -37,9 +37,15 @@ void x6100_server::rpc_set_vfo(wampcc::wamp_session& caller, wampcc::call_info i
 					uint32_t x = item->second.as_uint();
 
 					if (item->first.compare("freq") == 0) {
+						idle(true);
 						x6100_control_cmd(vfo == 1 ? x6100_vfoa_freq : x6100_vfob_freq, x);
+						
+						if (vfo == 1) {
+							x6100_control_set_band(x);
+						}
 					} else if (item->first.compare("mode") == 0) {
 						if (x >= x6100_mode_lsb && x <= x6100_mode_nfm) {
+							idle(true);
 							x6100_control_cmd(vfo == 1 ? x6100_vfoa_mode : x6100_vfob_mode, x);
 						}
 					}
@@ -65,6 +71,7 @@ void x6100_server::rpc_set_rxvol(wampcc::wamp_session& caller, wampcc::call_info
 			uint32_t x = item.as_uint();
 			
 			if (x < 55) {
+				idle(true);
 				x6100_control_cmd(x6100_rxvol, x);
 				dealer->publish(realm, "set_rxvol", {}, info.args);
 				caller.result(info.request_id);

@@ -19,8 +19,13 @@
  *
  */
 
-#include "x6100_server.h"
+#include <chrono>
 #include <iostream>
+#include <unistd.h>
+
+#include "x6100_server.h"
+
+using namespace std::chrono;
 
 x6100_server::x6100_server() 
 	:
@@ -40,6 +45,7 @@ x6100_server::x6100_server()
    	if (auto ec = fut.get())
    		throw std::runtime_error("listen failed: err " + std::to_string(ec.os_value()) + ", " + ec.message());
 
+   	cmd_idle = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
 x6100_server::~x6100_server() {
@@ -78,6 +84,17 @@ void x6100_server::flow_pack(const x6100_flow_t *pack) {
 	dealer->publish(realm, "samples", {}, samples_args);
 }
 
+void x6100_server::idle(bool update) {
+	uint64_t now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+
+	if (update) {
+		cmd_idle = now;
+	} else if (now - cmd_idle > 1000) {
+		x6100_control_idle();
+		cmd_idle = now;
+	}
+}
+
 ///
 
 int main() {
@@ -91,14 +108,18 @@ int main() {
 		return 1;
 
 	try {
-    	x6100_server server;
+    	x6100_server 	server;
 
 		while (true) {
-			x6100_flow_t *pack = x6100_flow_read();
+			x6100_flow_t 	*pack = x6100_flow_read();
 
 			if (pack) {
 				server.flow_pack(pack);
+			} else {
+				usleep(10);
 			}
+			
+			server.idle(false);
 		}
     	
     	return 0;
