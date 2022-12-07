@@ -22,8 +22,6 @@ if(BUILD_SHARED_LIBS)
 	list(APPEND TO_INSTALL x6100control_shared)
 endif()
 
-# set_target_properties(x6100control PROPERTIES PUBLIC_HEADER x6100_control.h  x6100_flow.h  x6100_gpio.h)
-
 set(INSTALL_HDRS
   ${CMAKE_CURRENT_SOURCE_DIR}/x6100_control.h
   ${CMAKE_CURRENT_SOURCE_DIR}/x6100_flow.h

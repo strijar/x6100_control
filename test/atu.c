@@ -21,9 +21,9 @@
 
 #include <unistd.h>
 
-#include "x6100_control.h"
-#include "x6100_flow.h"
-#include "x6100_gpio.h"
+#include <x6100control/x6100_control.h>
+#include <x6100control/x6100_flow.h>
+#include <x6100control/x6100_gpio.h>
 
 typedef enum {
 	ATU_IDLE = 0,

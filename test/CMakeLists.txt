@@ -2,12 +2,17 @@ if(NOT BUILD_TESTS)
   return()
 endif()
 
-add_executable(test_atu test_atu.c)
-add_executable(test_flow test_flow.c)
-add_executable(test_ptt test_ptt.c)
-add_executable(test_vfo test_vfo.c)
+add_executable(x6100_atu atu.c)
+add_executable(x6100_flow flow.c)
+add_executable(x6100_ptt ptt.c)
+add_executable(x6100_vfo vfo.c)
 
-target_link_libraries(test_atu LINK_PUBLIC x6100control)
-target_link_libraries(test_flow LINK_PUBLIC x6100control)
-target_link_libraries(test_ptt LINK_PUBLIC x6100control)
-target_link_libraries(test_vfo LINK_PUBLIC x6100control)
+target_link_libraries(x6100_atu LINK_PUBLIC x6100control)
+target_link_libraries(x6100_flow LINK_PUBLIC x6100control)
+target_link_libraries(x6100_ptt LINK_PUBLIC x6100control)
+target_link_libraries(x6100_vfo LINK_PUBLIC x6100control)
+
+list(APPEND TO_INSTALL x6100_atu x6100_flow x6100_ptt x6100_vfo)
+
+install(TARGETS ${TO_INSTALL}
+    LIBRARY DESTINATION "${INSTALL_LIB_DIR}")

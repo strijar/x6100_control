@@ -21,7 +21,7 @@
 
 #include <unistd.h>
 
-#include "x6100_control.h"
+#include <x6100control/x6100_control.h>
 
 int main() {
 	if (!x6100_control_init())

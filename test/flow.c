@@ -22,7 +22,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#include "x6100_flow.h"
+#include <x6100control/x6100_flow.h>
 
 int main() {
 	if (!x6100_flow_init())
