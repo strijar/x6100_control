@@ -1,4 +1,4 @@
-if(NOT BUILD_TEST)
+if(NOT BUILD_TESTS)
   return()
 endif()
 
