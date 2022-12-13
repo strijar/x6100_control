@@ -28,7 +28,7 @@ typedef enum
     x6100_vfob_att,
     x6100_vfob_pre,
     x6100_vfob_mode,
-    x6100_vfpb_agc,
+    x6100_vfob_agc,
 
     x6100_sple_atue_trx = 12,
     x6100_vi_vm,
@@ -65,7 +65,7 @@ typedef enum
     x6100_txqofs,
 
     x6100_pwrsync = 53,
-    x6100_last
+    x6100_last = 55
 } x6100_cmd_enum_t;
 
 /* Regs x6100_vfoa... x6100_vfob... */
@@ -121,3 +121,5 @@ enum
 
 AETHERX6100CTR_API bool x6100_control_init();
 AETHERX6100CTR_API bool x6100_control_cmd(x6100_cmd_enum_t cmd, uint32_t arg);
+AETHERX6100CTR_API void x6100_control_idle();
+AETHERX6100CTR_API void x6100_control_set_band(uint32_t freq);
