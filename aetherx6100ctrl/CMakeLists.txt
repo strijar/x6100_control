@@ -7,7 +7,7 @@ add_library(aetherx6100ctrl)
 set_target_properties(aetherx6100ctrl PROPERTIES OUTPUT_NAME "aetherx6100ctrl" # -
                                                  DEFINE_SYMBOL "AETHERX6100CTR_EXPORTING")
 
-set(AETHERX6100CTR_EXPORT_HEADER_FILE "include/aether_x6100/control/api.hpp")
+set(AETHERX6100CTR_EXPORT_HEADER_FILE "include/aether_x6100/control/api.h")
 
 generate_export_header(
   aetherx6100ctrl

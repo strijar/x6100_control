@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "aether_x6100/control/api.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -43,5 +45,5 @@ typedef struct __attribute__((__packed__))
 
 /* Functions */
 
-bool x6100_flow_init();
-x6100_flow_t *x6100_flow_read();
+AETHERX6100CTR_API bool x6100_flow_init();
+AETHERX6100CTR_API x6100_flow_t *x6100_flow_read();

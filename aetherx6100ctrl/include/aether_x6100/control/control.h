@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "aether_x6100/control/api.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -117,5 +119,5 @@ enum
 
 /* Functions */
 
-bool x6100_control_init();
-bool x6100_control_cmd(x6100_cmd_enum_t cmd, uint32_t arg);
+AETHERX6100CTR_API bool x6100_control_init();
+AETHERX6100CTR_API bool x6100_control_cmd(x6100_cmd_enum_t cmd, uint32_t arg);
