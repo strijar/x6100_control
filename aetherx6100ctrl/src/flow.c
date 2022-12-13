@@ -7,30 +7,31 @@
  *  Copyright (c) 2022 Rui Oliveira aka CT7ALW
  */
 
-#include <termios.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "aether_x6100/control/flow.h"
+
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <termios.h>
 #include <unistd.h>
 
-#include "x6100_flow.h"
+#define BUF_SIZE (sizeof(x6100_flow_t) * 3)
 
-#define BUF_SIZE		(sizeof(x6100_flow_t) * 3)
+static int flow_fd;
 
-static int				flow_fd;
+static uint8_t *buf = NULL;
+static uint8_t *buf_read = NULL;
+static uint16_t buf_size = 0;
 
-static uint8_t			*buf = NULL;
-static uint8_t			*buf_read = NULL;
-static uint16_t			buf_size = 0;
+static const uint32_t magic = 0xAA5555AA;
 
-static const uint32_t	magic = 0xAA5555AA;
-
-bool x6100_flow_init() {
-	flow_fd = open("/dev/ttyS1", O_RDWR);
+bool x6100_flow_init()
+{
+    flow_fd = open("/dev/ttyS1", O_RDWR);
 
     if (flow_fd < 0)
-		return false;
+        return false;
 
     struct termios attr;
 
@@ -39,68 +40,76 @@ bool x6100_flow_init() {
     cfsetispeed(&attr, B1152000);
     cfsetospeed(&attr, B1152000);
 
-    #if 1
-	cfmakeraw(&attr);
-	#else
-	attr.c_cflag = attr.c_cflag & 0xfffffe8f | 0x30;
-	attr.c_iflag = attr.c_iflag & 0xfffffa14;
-	attr.c_oflag = attr.c_oflag & 0xfffffffa;
+#if 1
+    cfmakeraw(&attr);
+#else
+    attr.c_cflag = attr.c_cflag & 0xfffffe8f | 0x30;
+    attr.c_iflag = attr.c_iflag & 0xfffffa14;
+    attr.c_oflag = attr.c_oflag & 0xfffffffa;
     attr.c_lflag = attr.c_lflag & 0xffff7fb4;
-    #endif
+#endif
 
-    if (tcsetattr(flow_fd, 0, &attr) < 0) {
-    	close(flow_fd);
-    	return false;
+    if (tcsetattr(flow_fd, 0, &attr) < 0)
+    {
+        close(flow_fd);
+        return false;
     }
 
-	buf = malloc(BUF_SIZE);
-	buf_read = buf;
-	buf_size = 0;
+    buf = malloc(BUF_SIZE);
+    buf_read = buf;
+    buf_size = 0;
 
     return true;
 }
 
-static x6100_flow_t * flow_check() {
-	uint8_t *begin = memmem(buf, buf_size, &magic, sizeof(magic));
+static x6100_flow_t *flow_check()
+{
+    uint8_t *begin = memmem(buf, buf_size, &magic, sizeof(magic));
 
-	if (begin) {
-		uint32_t len = buf + buf_size - begin;
+    if (begin)
+    {
+        uint32_t len = buf + buf_size - begin;
 
-        if (len >= sizeof(x6100_flow_t)) {
-			uint8_t			*tail_ptr = begin + sizeof(x6100_flow_t);
-			uint16_t		tail_len = len - sizeof(x6100_flow_t);
-			x6100_flow_t	*pack = begin;
+        if (len >= sizeof(x6100_flow_t))
+        {
+            uint8_t *tail_ptr = begin + sizeof(x6100_flow_t);
+            uint16_t tail_len = len - sizeof(x6100_flow_t);
+            x6100_flow_t *pack = begin;
 
-			// TODO: check crc32
+            // TODO: check crc32
 
-			memmove(buf, tail_ptr, tail_len);
+            memmove(buf, tail_ptr, tail_len);
 
-			buf_read = buf + tail_len;
-			buf_size = tail_len;
+            buf_read = buf + tail_len;
+            buf_size = tail_len;
 
-			return pack;
-		}
-	}
+            return pack;
+        }
+    }
 
     return NULL;
 }
 
-x6100_flow_t * x6100_flow_read() {
-	if (buf_size >= BUF_SIZE) {
-		buf_size = 0;
-		buf_read = buf;
-	}
+x6100_flow_t *x6100_flow_read()
+{
+    if (buf_size >= BUF_SIZE)
+    {
+        buf_size = 0;
+        buf_read = buf;
+    }
 
-	int res = read(flow_fd, buf_read, BUF_SIZE - buf_size);
+    int res = read(flow_fd, buf_read, BUF_SIZE - buf_size);
 
-    if (res > 0) {
-		buf_size += res;
-		buf_read += res;
+    if (res > 0)
+    {
+        buf_size += res;
+        buf_read += res;
 
-		if (buf_size > sizeof(x6100_flow_t)) {
-			return flow_check();
-		}
-	}
+        if (buf_size > sizeof(x6100_flow_t))
+        {
+            return flow_check();
+        }
+    }
 
     return NULL;
 }

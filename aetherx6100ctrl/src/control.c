@@ -7,43 +7,46 @@
  *  Copyright (c) 2022 Rui Oliveira aka CT7ALW
  */
 
+#include "aether_x6100/control/control.h"
+
+#include <fcntl.h>
+#include <linux/i2c-dev.h>
+#include <linux/i2c.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
 #include <sys/ioctl.h>
-#include <linux/i2c.h>
-#include <linux/i2c-dev.h>
 
-#include "x6100_control.h"
-
-
-typedef struct __attribute__((__packed__)) {
-	uint16_t	addr;
-	uint32_t	arg;
+typedef struct __attribute__((__packed__))
+{
+    uint16_t addr;
+    uint32_t arg;
 } cmd_struct_t;
 
-typedef struct __attribute__((__packed__)) {
-	uint16_t	addr;
-	uint32_t	arg[x6100_last + 1];
+typedef struct __attribute__((__packed__))
+{
+    uint16_t addr;
+    uint32_t arg[x6100_last + 1];
 } all_cmd_struct_t;
 
-static int				i2c_fd = 0;
-static int				i2c_addr = 0x72;
-static all_cmd_struct_t	all_cmd;
+static int i2c_fd = 0;
+static int i2c_addr = 0x72;
+static all_cmd_struct_t all_cmd;
 
 /* * */
 
-static bool send_regs(void *regs, size_t size) {
-  	struct i2c_msg				message = { i2c_addr, 0, size, regs };
-  	struct i2c_rdwr_ioctl_data	ioctl_data = { &message, 1 };
+static bool send_regs(void *regs, size_t size)
+{
+    struct i2c_msg message = {i2c_addr, 0, size, regs};
+    struct i2c_rdwr_ioctl_data ioctl_data = {&message, 1};
 
     int res = ioctl(i2c_fd, I2C_RDWR, &ioctl_data);
 
     return (res > 0);
 }
 
-bool x6100_control_init() {
-	i2c_fd = open("/dev/i2c-0", O_RDWR);
+bool x6100_control_init()
+{
+    i2c_fd = open("/dev/i2c-0", O_RDWR);
 
     if (i2c_fd < 0)
         return false;
@@ -61,9 +64,10 @@ bool x6100_control_init() {
     return send_regs(&all_cmd, sizeof(all_cmd));
 }
 
-bool x6100_control_cmd(x6100_cmd_enum_t cmd, uint32_t arg) {
-	cmd_struct_t				command;
-  	uint16_t					addr = cmd * 4;
+bool x6100_control_cmd(x6100_cmd_enum_t cmd, uint32_t arg)
+{
+    cmd_struct_t command;
+    uint16_t addr = cmd * 4;
 
     command.addr = (addr & 0xFF) << 8 | (addr >> 8);
     command.arg = arg;
